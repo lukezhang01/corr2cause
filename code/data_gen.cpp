@@ -361,7 +361,7 @@ namespace node_relations{
                 if (edges[node_stack[i+1]][node_stack[i]]==1) left_length+=1;
                 else break;
 
-            for (int i = node_stack_pointer; i > 1; i++)
+            for (int i = node_stack_pointer; i > 1; i--)
                 if (edges[node_stack[i-1]][node_stack[i]]==1) right_length+=1;
                 else break;
 
@@ -450,14 +450,16 @@ namespace json_output{
         int len = x.size();
         putchar('[');
         for (int i = 0;i<len;i++){
-            cout<<x[i]<<',';
+            if (i) putchar(',');
+            cout<<x[i];
         }putchar(']');putchar(',');
     }
     void jump_pair_vector(vector<pair<int,int> > &x){
         int len = x.size();
         putchar('[');
         for (int i = 0;i<len;i++){
-            cout<<'['<<x[i].first<<','<<x[i].second<<']'<<',';
+            if (i) putchar(',');
+            cout<<'['<<x[i].first<<','<<x[i].second<<']';
         }putchar(']');putchar(',');
     }
     void jump_single_graph(unique_DAG &graph){
@@ -484,35 +486,47 @@ namespace json_output{
         printf("\"reconstruct_graph\":{");
         int len = graph.reconstruct_graph.size();
         for (int i = 0; i<len; i++){
-            printf("%d:[", graph.reconstruct_graph[i]);
-            for (int j = 1; j<=n; j++) write(shuffleDag[flag_generated_graph[graph.reconstruct_graph[i]]].order_list[j]), putchar(',');
-            printf("],");
-        }putchar('}');
+            if (i) putchar(',');
+            printf("\"%d\":[", graph.reconstruct_graph[i]);
+            for (int j = 1; j<=n; j++){
+                if (j>1) putchar(',');
+                write(shuffleDag[flag_generated_graph[graph.reconstruct_graph[i]]].order_list[j]);
+            }
+            putchar(']');
+        }printf("},");
 
         printf("\"MEC_graph\":");jump_single_vector(graph.MEC_graph_idx);
 
         printf("\"pair_relations\":[");
         for (int i = 1; i<=n; i++){
+            if (i>1) putchar(',');
             putchar('[');
-            for (int j=1;j<=n;j++)printf("%d,",graph.pair_relations[i][j]);
-            putchar(']');putchar(',');
-        }putchar(']');
-        putchar('}');puts("");
+            for (int j=1;j<=n;j++){
+                if (j>1) putchar(',');
+                printf("%d",graph.pair_relations[i][j]);
+            }
+            putchar(']');
+        }printf("],");
 
         printf("\"pair_relations_count\":[");
         for (int i = 1; i<=n; i++){
+            if (i>1) putchar(',');
             putchar('[');
             for (int j=1;j<=n;j++){
+                if (j>1) putchar(',');
                 putchar('[');
-                for (int k=0;k<7;k++) printf("%d,",graph.pair_relation_count[i][j][k]);
-                putchar(']');putchar(',');
+                for (int k=0;k<7;k++){
+                    if (k>0) putchar(',');
+                    printf("%d",graph.pair_relation_count[i][j][k]);
+                }
+                putchar(']');
             }
-            putchar(']');putchar(',');
+            putchar(']');
         }putchar(']');
         putchar('}');puts("");
     }
     void jump_final_answer(){
-        freopen("/Users/lvzhiheng/causal_relation_new_n=6.jsonl", "w", stdout);
+        freopen("causal_relation_new_n=5.jsonl", "w", stdout);
         for (int i = 1; i <= unique_DAG_num; i++){
             jump_single_graph(uniqueDag[i]);
         }

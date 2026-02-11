@@ -1,0 +1,16 @@
+numpy
+pandas
+torch
+transformers
+scikit-learn
+tqdm
+torchmetrics
+matplotlib
+seaborn
+nltk
+openai
+huggingface_hub
+efficiency
+shap
+scipy
+pytorch_transformers
