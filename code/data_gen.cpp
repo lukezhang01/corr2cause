@@ -8,7 +8,7 @@
 //#include "json.hpp"
 using namespace std;
 //using json = nlohmann::json;
-const int n = 5;
+const int n = 3;
 const int nn = n*(n-1)/2;
 const int max_n = 8;
 //const int total_graph_number = ;
@@ -381,13 +381,19 @@ namespace node_relations{
     }
 
     int count_relation(unique_DAG& graph_1, unique_DAG& graph_2, int* order_list){
+        int inv_order[max_n + 1];
+        for (int i = 1; i <= n; i++)
+            inv_order[order_list[i]] = i;
+
         for (int i = 1; i <= n; i++)
             for (int j = 1; j <= n; j++)
                 if (i != j) {
-                    int new_x = order_list[i], new_y = order_list[j];
+                    int new_x = inv_order[i], new_y = inv_order[j];
                     for (int k = 0; k < 7; k++) {
-                        if ((graph_2.pair_relations[new_x][new_y]>>k)&1)
+                        if ((graph_2.pair_relations[new_x][new_y]>>k)&1){ //is the kth bit of graph_2.pair_relations[new_x][new_y] set to 1
                             graph_1.pair_relation_count[i][j][k]++;
+                        }
+                            
                     }
                 }
     }
@@ -526,7 +532,8 @@ namespace json_output{
         putchar('}');puts("");
     }
     void jump_final_answer(){
-        freopen("causal_relation_new_n=5.jsonl", "w", stdout);
+        std::string filename = "causal_relation_new_n=" + std::to_string(n) + ".jsonl";
+        freopen(filename.c_str(), "w", stdout);
         for (int i = 1; i <= unique_DAG_num; i++){
             jump_single_graph(uniqueDag[i]);
         }
