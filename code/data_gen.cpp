@@ -8,13 +8,13 @@
 //#include "json.hpp"
 using namespace std;
 //using json = nlohmann::json;
-const int n = 4;
+const int n = 6;
 const int nn = n*(n-1)/2;
 const int max_n = 8;
 //const int total_graph_number = ;
 //const int total_order_number = ;
 
-int power_3[10];
+int power_3[max_n * (max_n - 1) / 2];
 int flag[1000010];
 bool f[1000010];
 int mp[100][100];
@@ -36,8 +36,8 @@ int unique_DAG_num = 0;
 struct Shuffle_DAG{
     int *order_list;
     int graph_idx;//是下表
-}shuffleDag[1000010];
-int flag_generated_graph[1000010] = {}, number_shuffleDag = 0;// If the graph is already generated, then skip it.
+}shuffleDag[15000010];
+int flag_generated_graph[15000010] = {}, number_shuffleDag = 0;// If the graph is already generated, then skip it.
 //using namespace std;
 namespace d_seperate{
     inline ll read(){
@@ -537,7 +537,7 @@ namespace json_output{
 }
 int main() {
     power_3[0]=1;
-    for (int i=1;i<=9;i++)power_3[i]=power_3[i-1]*3;
+    for (int i=1;i<nn;i++)power_3[i]=power_3[i-1]*3;
     node_relations::generate_node_relations();
     json_output::jump_final_answer();
     return 0;
