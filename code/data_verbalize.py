@@ -9,7 +9,7 @@ class Constants:
     file_causal_relation = root + '/causal_relation_new_n={num_nodes}.jsonl'
     file_out_template_var1_var2 = root + '/causalnli_{num_nodes}nodes_var1_var2.json'
 
-    variable_refactor = False
+    variable_refactor = True
     data_folder_suffix = '_from_Z' if variable_refactor else ''
 
     data_folder = f'{root}/data_3class{data_folder_suffix}/'
